@@ -17,6 +17,7 @@ public class spillScript : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
+                moneyCounter.instance.IncreaseMoney(1);
                 Destroy(gameObject);
             }
         }
