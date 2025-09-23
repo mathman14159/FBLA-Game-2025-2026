@@ -3,26 +3,75 @@ using UnityEngine;
 public class mirrorScript : MonoBehaviour
 {
 
-    public Transform playerCamera; // Assign your main camera
-    public Transform mirrorPlane;  // Assign the mirror plane
-    public Camera mirrorCamera;    // Assign the secondary camera
+
+[RequireComponent(typeof(Renderer))]
+public class MirrorReflection : MonoBehaviour
+{
+    [Header("Mirror Settings")]
+    public Camera playerCamera;          // Assign your main camera
+    public Camera mirrorCamera;          // Secondary camera (child of mirror if you like)
+    public int textureResolution = 1024; // Reflection texture size
+
+    private RenderTexture renderTexture;
+    private Renderer mirrorRenderer;
+    private Material mirrorMaterial;
+
+    void Start()
+    {
+        // Set up RenderTexture
+        renderTexture = new RenderTexture(textureResolution, textureResolution, 16, RenderTextureFormat.ARGB32);
+        renderTexture.Create();
+
+        // Apply RenderTexture to mirror camera
+        if (mirrorCamera != null)
+        {
+            mirrorCamera.targetTexture = renderTexture;
+        }
+
+        // Apply RenderTexture to mirror material
+        mirrorRenderer = GetComponent<Renderer>();
+        mirrorMaterial = new Material(mirrorRenderer.sharedMaterial);
+        mirrorMaterial.mainTexture = renderTexture;
+        mirrorRenderer.material = mirrorMaterial;
+    }
 
     void LateUpdate()
     {
-        // Mirror position
-        Vector3 pos = playerCamera.position;
-        Vector3 normal = mirrorPlane.up; // assuming plane is flat
+        if (playerCamera == null || mirrorCamera == null) return;
 
-        float d = Vector3.Dot(normal, mirrorPlane.position - pos);
-        Vector3 mirroredPos = pos + 2 * d * normal;
+        // Mirror plane
+        Vector3 mirrorPos = transform.position;
+        Vector3 mirrorNormal = transform.up; // assumes mirror's local Y is "forward"
 
-        mirrorCamera.transform.position = mirroredPos;
+        // Position reflection camera
+        Vector3 camPos = playerCamera.transform.position;
+        float dist = Vector3.Dot(mirrorNormal, mirrorPos - camPos);
+        Vector3 reflectedPos = camPos + 2f * dist * mirrorNormal;
+        mirrorCamera.transform.position = reflectedPos;
 
-        // Mirror rotation
-        Vector3 forward = Vector3.Reflect(playerCamera.forward, normal);
-        Vector3 up = Vector3.Reflect(playerCamera.up, normal);
-        mirrorCamera.transform.rotation = Quaternion.LookRotation(forward, up);
+        // Rotation reflection
+        Vector3 forward = playerCamera.transform.forward;
+        Vector3 up = playerCamera.transform.up;
+        Vector3 reflectedForward = Vector3.Reflect(forward, mirrorNormal);
+        Vector3 reflectedUp = Vector3.Reflect(up, mirrorNormal);
+
+        mirrorCamera.transform.rotation = Quaternion.LookRotation(reflectedForward, reflectedUp);
+
+        // Make mirror camera match FOV & settings
+        mirrorCamera.fieldOfView = playerCamera.fieldOfView;
+        mirrorCamera.nearClipPlane = playerCamera.nearClipPlane;
+        mirrorCamera.farClipPlane = playerCamera.farClipPlane;
     }
+
+    void OnDisable()
+    {
+        if (renderTexture != null)
+        {
+            renderTexture.Release();
+        }
+    }
+}
+
 }
 
 

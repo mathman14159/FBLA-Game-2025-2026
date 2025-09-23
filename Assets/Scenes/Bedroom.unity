@@ -151,9 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7533d23ea6979c84bb5203abc310bf37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  playerCamera: {fileID: 1183343729}
-  mirrorPlane: {fileID: 167654791}
-  mirrorCamera: {fileID: 2362530}
 --- !u!114 &2362528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,8 +486,8 @@ Transform:
   m_GameObject: {fileID: 167654787}
   serializedVersion: 2
   m_LocalRotation: {x: 0.009413664, y: -0.70704424, z: 0.70704406, w: 0.009413665}
-  m_LocalPosition: {x: -37.19671, y: 3.7, z: -8.22}
-  m_LocalScale: {x: 0.41166762, y: 1, z: 0.60806257}
+  m_LocalPosition: {x: -37.19671, y: 2.93, z: -8.22}
+  m_LocalScale: {x: -0.20701432, y: 1, z: 0.36847982}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
