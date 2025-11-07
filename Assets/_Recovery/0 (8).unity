@@ -557,12 +557,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::pickUpScript
   player: {fileID: 438754830}
-  holdPos: {fileID: 1306202734}
+  playerBody: {fileID: 394814193}
   throwForce: 500
   pickUpRange: 5
   holdLayer: 8
   HDtrue: 0
   Broomtrue: 0
+  sideOffset: {x: 0.6, y: 0.5, z: 0}
 --- !u!1 &488259136
 GameObject:
   m_ObjectHideFlags: 0

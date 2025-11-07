@@ -3,56 +3,50 @@ using UnityEngine;
 public class PickUpScript : MonoBehaviour
 {
     [Header("References")]
-    public GameObject player;        // Reference to the player
-    public Transform holdPos;        // Where items will be held
+    public GameObject player;      // Your player object (with collider)
+    public Transform playerBody;   // Use the player root transform (not the camera)
 
     [Header("Settings")]
-    public float throwForce = 500f;  // Throw force
-    public float pickUpRange = 5f;   // Pickup distance
-    public int holdLayer = 8;        // Custom layer for held objects (set in Unity Layer Manager)
+    public float throwForce = 500f;
+    public float pickUpRange = 5f;
+    public int holdLayer = 8;
 
-    private GameObject heldObj;      // Currently held object
-    private Rigidbody heldObjRb;     // Rigidbody of held object
+    private GameObject heldObj;
+    private Rigidbody heldObjRb;
+
     public bool HDtrue;
+    public bool Broomtrue;
+
+    // Adjust for position offset — right side of player
+    [SerializeField] private Vector3 sideOffset = new Vector3(0.5f, 0.5f, 0.0f);
+
+    // Fixed world rotation for held items (so it never turns)
+    private Quaternion fixedWorldRotation = Quaternion.identity;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) // E to pick up / drop
+        if (Input.GetKeyDown(KeyCode.E))
         {
             if (heldObj == null)
-            {
                 TryPickUp();
-            }
             else
-            {
                 DropObject();
-            }
         }
 
-        if (heldObj != null)
-        {
-            MoveObject(); // keep held object at holdPos
-
-            if (Input.GetMouseButtonDown(0)) // Left click to throw
-            {
-                ThrowObject();
-            }
-        }
+        if (heldObj != null && Input.GetMouseButtonDown(0))
+            ThrowObject();
     }
 
     void TryPickUp()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, pickUpRange))
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, pickUpRange))
         {
-            if (hit.collider.CompareTag("canPickUp"))
+            if (hit.collider.CompareTag("canPickUp") || hit.collider.CompareTag("hotDog") || hit.collider.CompareTag("Broom"))
             {
                 PickUpObject(hit.collider.gameObject);
-            }
-            if (hit.collider.CompareTag("hotDog"))
-            {
-                PickUpObject(hit.collider.gameObject);
-                HDtrue = true;
+
+                if (hit.collider.CompareTag("hotDog")) HDtrue = true;
+                if (hit.collider.CompareTag("Broom")) Broomtrue = true;
             }
         }
     }
@@ -64,51 +58,64 @@ public class PickUpScript : MonoBehaviour
             heldObj = pickUpObj;
             heldObjRb = rb;
 
-            // Adjust physics while held
+            // Lock physics
             heldObjRb.useGravity = false;
-            heldObjRb.linearDamping = 10;
-            heldObjRb.constraints = RigidbodyConstraints.FreezeRotation;
+            heldObjRb.isKinematic = true;
+            heldObjRb.constraints = RigidbodyConstraints.FreezeAll;
 
-            heldObj.layer = holdLayer; // Move to hold layer
+            // Ignore player collision
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
+
+            // Move to custom layer
+            heldObj.layer = holdLayer;
+
+            // Save its current world rotation (so it never changes)
+            fixedWorldRotation = heldObj.transform.rotation;
         }
     }
 
-    void MoveObject()
+    void LateUpdate()
     {
-        // Smoothly move toward holdPos
-        Vector3 moveDir = holdPos.position - heldObj.transform.position;
-        heldObjRb.linearVelocity = moveDir * 10f; // Tweak multiplier for responsiveness
+        if (heldObj != null)
+        {
+            // Move relative to player position (not rotation)
+            Vector3 rightOffset = playerBody.right * sideOffset.x;
+            Vector3 upOffset = Vector3.up * sideOffset.y;
+            Vector3 forwardOffset = Vector3.forward * sideOffset.z; // stays world-forward
+
+            heldObj.transform.position = playerBody.position + rightOffset + upOffset + forwardOffset;
+
+            // Keep the original rotation (never change)
+            heldObj.transform.rotation = fixedWorldRotation;
+        }
     }
 
     void DropObject()
     {
-        Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
-        heldObj.layer = 0; // Back to default layer
-
-        // Reset physics
-        heldObjRb.useGravity = true;
-        heldObjRb.linearDamping = 1;
-        heldObjRb.constraints = RigidbodyConstraints.None;
-
+        ResetHeldObjectPhysics();
         heldObj = null;
         heldObjRb = null;
-
         HDtrue = false;
+        Broomtrue = false;
     }
 
     void ThrowObject()
     {
-        Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
-        heldObj.layer = 0;
-
-        heldObjRb.useGravity = true;
-        heldObjRb.linearDamping = 1;
-        heldObjRb.constraints = RigidbodyConstraints.None;
-
-        heldObjRb.AddForce(transform.forward * throwForce);
-
+        ResetHeldObjectPhysics();
+        heldObjRb.AddForce(playerBody.forward * throwForce);
         heldObj = null;
         heldObjRb = null;
+    }
+
+    void ResetHeldObjectPhysics()
+    {
+        if (heldObj == null || heldObjRb == null) return;
+
+        heldObjRb.useGravity = true;
+        heldObjRb.isKinematic = false;
+        heldObjRb.constraints = RigidbodyConstraints.None;
+
+        Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
+        heldObj.layer = 0;
     }
 }

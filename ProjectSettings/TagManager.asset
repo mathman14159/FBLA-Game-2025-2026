@@ -6,6 +6,7 @@ TagManager:
   tags:
   - canPickUp
   - hotDog
+  - Broom
   layers:
   - Default
   - TransparentFX

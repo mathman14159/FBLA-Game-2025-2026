@@ -15,7 +15,7 @@ public class spillScript : MonoBehaviour
     {
             if (InSide)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.G))
             {
                 moneyCounter.instance.IncreaseMoney(1);
                 Destroy(gameObject);
@@ -24,7 +24,11 @@ public class spillScript : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        InSide = true;
+        if (other.gameObject.CompareTag("Broom"))
+        {
+            
+            InSide = true;
+        }
         
     }
     void OnTriggerExit(Collider other)
