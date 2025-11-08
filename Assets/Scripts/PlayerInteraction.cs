@@ -14,6 +14,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private Camera playerCamera;
     private PickupObject heldObject;
+    private PickupObject lastHoveredObject;
 
     private PlayerInput playerInput;
     private InputAction grabAction;
@@ -44,8 +45,13 @@ public class PlayerInteraction : MonoBehaviour
             PickupObject pickup = hit.collider.GetComponent<PickupObject>();
 
             // Hover highlight
-            if (pickup != null && heldObject == null)
+            if (pickup != null && heldObject == null) {
+                if (lastHoveredObject != pickup && lastHoveredObject != null) {
+                    lastHoveredObject.SetHover(false);
+                }
                 pickup.SetHover(true);
+                lastHoveredObject = pickup;
+            }
 
             // Pick up or drop
             if (grabAction.WasPressedThisFrame())
@@ -61,10 +67,10 @@ public class PlayerInteraction : MonoBehaviour
                 }
             }
         }
-        else if (heldObject == null)
-        {
+        else if (heldObject == null) {
             // Clear hover if not looking at anything
             ClearHover();
+            
         }
         
     }
@@ -74,6 +80,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         heldObject = pickup;
         heldObject.OnPickup(holdPoint);
+        lastHoveredObject = null;
     }
 
     [System.Obsolete]
@@ -81,15 +88,16 @@ public class PlayerInteraction : MonoBehaviour
     {
         heldObject.OnDrop(playerCamera.transform.forward);
         heldObject = null;
+        lastHoveredObject = null;
     }
 
     [System.Obsolete]
     private void ClearHover()
     {
-        // Disable hover visuals on all pickup objects
-        // You can make this more efficient later with event-based highlight
-        foreach (PickupObject p in FindObjectsOfType<PickupObject>())
-            p.SetHover(false);
+        if (lastHoveredObject != null) {
+            lastHoveredObject.SetHover(false);
+            lastHoveredObject = null;
+        }
     }
 }
 

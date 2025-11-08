@@ -11,17 +11,31 @@ public class PickupObject : MonoBehaviour
     public float moveSpeed = 15f;
     public float rotateSpeed = 10f;
     public float throwForce = 3f;
+    private HoverUI hoverUI;
 
     private Material originalMat;
     private Renderer rend;
-    public Material highlightMat; // optional
+    public Material highlightMat;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rend = GetComponent<Renderer>();
+        hoverUI = GetComponentInChildren<HoverUI>();
         if (rend != null)
             originalMat = rend.material;
+    }
+    public void SetHover(bool isHovering)
+    {
+        if (rend == null) return;
+
+        // Material highlight (optional)
+        if (highlightMat != null)
+            rend.material = isHovering ? highlightMat : originalMat;
+
+        // Show or hide hover text
+        if (hoverUI != null)
+            hoverUI.Show(isHovering);
     }
 
     [System.Obsolete]
@@ -48,7 +62,7 @@ public class PickupObject : MonoBehaviour
         rb.drag = 10f;
         rb.angularDrag = 10f;
 
-        SetHover(false); // clear highlight
+         // clear highlight
     }
 
     [System.Obsolete]
@@ -64,13 +78,5 @@ public class PickupObject : MonoBehaviour
         rb.AddForce(forwardDir * throwForce, ForceMode.Impulse);
     }
 
-    public void SetHover(bool isHovering)
-    {
-        if (rend == null || highlightMat == null) return;
-
-        if (isHovering)
-            rend.material = highlightMat;
-        else
-            rend.material = originalMat;
-    }
+ 
 }
