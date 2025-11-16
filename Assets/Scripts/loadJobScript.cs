@@ -1,35 +1,31 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class loadJobScript : MonoBehaviour
 {
-    public bool InSide;
-    public int JobNumber;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    public Camera playerCamera;
+    public LayerMask jobItem;
+    public float interactDistance = 3;
+    
 
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (InSide)
+        if (Input.GetMouseButtonDown(1))
         {
-            if(Input.GetKeyDown(KeyCode.E))
+            Debug.Log("rightclicked");
+            Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+            if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, jobItem))
             {
-                SceneManager.LoadScene("Job " + JobNumber);
+                Debug.Log("raycastHit");
+                if (hit.collider.TryGetComponent<JobIdentifier>(out JobIdentifier job))
+                    {
+                        Debug.Log("SceneOpen");
+                        SceneManager.LoadScene("Job " + job.jobNumber);
+                    }
             }
         }
     }
-
-    void OnTriggerEnter(Collider other)
-    {
-        InSide = true;
-    }
-    void OnTriggerExit(Collider other)
-    {
-        InSide = false;
-    }
+        
 }
