@@ -13,11 +13,12 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] public Transform holdPoint;
 
     private Camera playerCamera;
-    private PickupObject heldObject;
+    public PickupObject heldObject;
     private PickupObject lastHoveredObject;
 
     private PlayerInput playerInput;
     private InputAction grabAction;
+    public bool coffee;
 
     void Awake()
     {
@@ -60,10 +61,15 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     if (pickup != null)
                         PickUpObject(pickup);
+                        if (hit.collider.CompareTag("Coffee"))
+                        {
+                        coffee = true;
+                        }
                 }
                 else
                 {
                     DropObject();
+                    
                 }
             }
         }
@@ -89,6 +95,7 @@ public class PlayerInteraction : MonoBehaviour
         heldObject.OnDrop(playerCamera.transform.forward);
         heldObject = null;
         lastHoveredObject = null;
+        coffee = false;
     }
 
     [System.Obsolete]

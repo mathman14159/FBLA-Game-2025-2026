@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public string itemName; // Example: "HotDog", "Mop", "Soda"
 
-    public static Item instance;
+    public Item instance;
 
-    void Awake()
+    public void Awake()
     {
         instance = this;
     }

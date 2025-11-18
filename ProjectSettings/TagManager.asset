@@ -8,6 +8,9 @@ TagManager:
   - hotDog
   - Broom
   - canUse
+  - Customer
+  - Coffee
+  - Item
   layers:
   - Default
   - TransparentFX

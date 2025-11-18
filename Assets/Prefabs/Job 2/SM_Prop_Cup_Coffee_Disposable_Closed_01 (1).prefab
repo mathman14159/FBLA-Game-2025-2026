@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 2596104698168517862}
   - component: {fileID: 2343325273820331959}
   - component: {fileID: 6260097110140711561}
+  - component: {fileID: -3697720469807534323}
   m_Layer: 8
   m_Name: SM_Prop_Cup_Coffee_Disposable_Closed_01 (1)
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -156,3 +157,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.17977966, y: 0.22540623, z: 0.17977953}
   m_Center: {x: 0.0000003054738, y: 0.112703115, z: 0.00000063702464}
+--- !u!114 &-3697720469807534323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6138419022158752482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 422b5763cebf8074caebcde64edb7e01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  instance: {fileID: 0}
