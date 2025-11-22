@@ -11,6 +11,7 @@ TagManager:
   - Customer
   - Coffee
   - Item
+  - Flashlight
   layers:
   - Default
   - TransparentFX
