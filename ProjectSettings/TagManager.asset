@@ -12,6 +12,13 @@ TagManager:
   - Coffee
   - Item
   - Flashlight
+  - Evidence
+  - Evidence1
+  - Evidence2
+  - Evidence3
+  - Evidence4
+  - Evidence5
+  - Evidence6
   layers:
   - Default
   - TransparentFX
@@ -23,7 +30,7 @@ TagManager:
   - machineLayer
   - holdLayer
   - jobItem
-  - 
+  - evidence
   - 
   - 
   - 

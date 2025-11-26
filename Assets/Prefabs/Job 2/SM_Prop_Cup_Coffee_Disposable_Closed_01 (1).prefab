@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2343325273820331959}
   - component: {fileID: 6260097110140711561}
   - component: {fileID: -3697720469807534323}
+  - component: {fileID: -7706074628906383126}
   m_Layer: 8
   m_Name: SM_Prop_Cup_Coffee_Disposable_Closed_01 (1)
   m_TagString: Item
@@ -170,3 +171,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   instance: {fileID: 0}
+--- !u!114 &-7706074628906383126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6138419022158752482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb576067b01f3f4395021e3506a39be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableBase
+  interactionType: 0
+  promptText: Press E to Pick Up
+  hoverUIPrefab: {fileID: 1915909279863448138, guid: 09f28d1479992194da45618d82c20147, type: 3}
