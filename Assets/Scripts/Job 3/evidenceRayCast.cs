@@ -48,33 +48,52 @@ public class evidenceRayCast : MonoBehaviour
             }
             if (hit.collider.CompareTag("Evidence2"))
             {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
                 evidence2.SetActive(true);
                 sticky2.SetActive(false);
                 item2.SetActive(true);
+                }
+               
             }
             if (hit.collider.CompareTag("Evidence3"))
             {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
                 evidence3.SetActive(true);
                 sticky3.SetActive(false);
                 item3.SetActive(true);
+                }
+                
             }
             if (hit.collider.CompareTag("Evidence4"))
             {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
                 evidence4.SetActive(true);
                 sticky4.SetActive(false);
-                item4.SetActive(true);
+                item4.SetActive(true);  
+                }
             }
             if (hit.collider.CompareTag("Evidence5"))
             {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
                 evidence5.SetActive(true);
                 sticky5.SetActive(false);
                 item5.SetActive(true);
+                }
+                
             }
             if (hit.collider.CompareTag("Evidence6"))
             {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
                 evidence6.SetActive(true);
                 sticky6.SetActive(false);
                 item6.SetActive(true);
+                }
+                
             }
         }
     }
