@@ -19,6 +19,10 @@ TagManager:
   - Evidence4
   - Evidence5
   - Evidence6
+  - Suspect1
+  - Suspect2
+  - Suspect3
+  - Suspect4
   layers:
   - Default
   - TransparentFX
